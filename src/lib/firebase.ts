@@ -1,7 +1,8 @@
 
 import { initializeApp } from "firebase/app";
-import { doc } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, onSnapshot, query } from "firebase/firestore";
 import type { Post } from "./types";
+import firebase from "firebase/compat/app";
 
 
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -9,18 +10,32 @@ import type { Post } from "./types";
 // Your web app's Firebase configuration
 // here the api keys are public by design, every client se a public key, then security rules server side restricts access
 const firebaseConfig = {
-    // TODO get api keys and other info from firebase's site.
+    
+        apiKey: "AIzaSyCrBoafqxEeRVgOHumiE41Gz3eciPjn_Us",
+        authDomain: "oct3rdworkshgop.firebaseapp.com",
+        projectId: "oct3rdworkshgop",
+        storageBucket: "oct3rdworkshgop.appspot.com",
+        messagingSenderId: "225845044072",
+        appId: "1:225845044072:web:cd28ae82925ce4ec872cdd"
+      
+
 };
 
 
 
 // Initialize Firebase
-
+const app = initializeApp(firebaseConfig);
 // TODO get the default database when app starts (free plan only gets one db)
-// const db = getFirestore(firebase)
+const db = getFirestore(app)
 
 export async function newPost(userName: string, content: string) {
     // TODO add a new post to a "posts" collection via the addDoc function
+
+    addDoc(collection(db, "posts"), {
+        userName:userName,
+        content:content,
+        likes: 0
+    });
 }
 
 
@@ -51,6 +66,18 @@ export async function onPostChange(onChange: (changes: Post[]) => void) {
 
     // note that onSnapshot trigger immediately when the app starts (and if app goes offline and back online later)
     // so that this is useful for the initial fetch as well!
+
+    onSnapshot(query(collection(db, "posts")), (snapshot)=>{
+        
+        const posts : Post[] = [];
+        snapshot.docChanges().forEach(postDoc=>{
+            const postObj = postDoc.doc.data();
+            postObj["id"] = postDoc.doc.id;
+            posts.push(postObj as Post);
+        })
+
+        onChange(posts);
+    })
 
 }
 

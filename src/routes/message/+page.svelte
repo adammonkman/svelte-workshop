@@ -1,4 +1,11 @@
 <script lang="ts">
+    import Button from "$lib/components/Button.svelte";
+    import PostItem from "$lib/components/PostItem.svelte";
+    import TextInput from "$lib/components/TextInput.svelte";
+    import { newPost, onPostChange } from "$lib/firebase";
+    import type { Post } from "$lib/types";
+    import { onMount } from "svelte";
+
     // some starting data to test our UI before database is made yet.
     let _posts: { [id: string]: Post } = {
         "1": {
@@ -33,25 +40,65 @@
     function addPost() {
         // TODO add new Posts to the list when this function is called.
         // TODO once database is ready, reflect changes in db.
+        
+    
+
+        newPost(name, postContent)
     }
+
+    let likedPosts = new Set();
 
     function toggleLike(postid: string, liked: boolean) {
         // TODO if liked, make it not liked and vice versa.
         // TODO once db is ready, reflect changes in db.
+    
+        if (liked){
+            likedPosts.delete(postid);
+            posts[postid].likes -=1;
+        }else{
+            likedPosts.add(postid);
+            posts[postid].likes += 1;
+        }
+    
     }
+
+    let name = "";
+    let postContent = "";
+
+    onMount(()=>{
+        onPostChange((newPosts)=>{
+            newPosts.forEach(post =>{
+                posts[post.id] = post;
+            })
+        })
+    })
 </script>
 
 <h1>My Message Board</h1>
 
 <div style="display: flex; flex-direction:column; width:400px;">
-    <!--TODO Name input -->
+    <TextInput
+    label="My name is" placeholder="name here" bind:text={name}>
+</TextInput>
 
-    <!-- TODO input field for post content -->
-    <!-- TODO button to submit post content -->
+    <TextInput label="Post content" placeholder="your msg here" bind:text={postContent}>
+    </TextInput>
+    <Button on:click={addPost}>
+        Submit
+    </Button>
+
+
+    
 </div>
+
 
 <div class="posts">
     <!-- TODO do a #each statement to render each post -->
+    {#each Object.values(posts) as post (post.id)}
+        <PostItem post={post} liked={likedPosts.has(post.id)} on:liked={(event) =>{
+            toggleLike(post.id, event.detail.state);
+        }}></PostItem>
+    {/each}
 </div>
 
 

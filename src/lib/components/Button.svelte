@@ -1,7 +1,18 @@
 <script>
     // TODO implement a simple button component here!
     // make it support ability to be disabled, highlighted, custom styles, and bubbles events.
+
+    export let disabled = false;
+    export let highlighted = false;
+
+
 </script>
+    
+  
+
+<button disabled={disabled} class:highLighted = {highlighted} on:click>
+    <slot></slot>
+</button>
 
 <style>
     /* Use the provided */

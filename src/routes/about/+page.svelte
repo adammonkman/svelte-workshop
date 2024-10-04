@@ -1,8 +1,29 @@
-<script lang="ts"></script>
+<script>
+    import { get } from "svelte/store";
 
-<h1>Your info goes here!</h1>
+    let name = "jonkler";
+    let sigmalevel = 100;
 
-<h3>About this template</h3>
-<p>This template is provided as part of svelte+firebase/fullstack webshop of Stormhacks 2.0, Oct 3th 2024.</p>
+    function getSigma(){
+        sigmalevel = sigmalevel + 100;
+    }
+</script>
 
-<style></style>
+<hi class="title">erm what the sigma</hi>
+
+Im the {name} baby! and im sigma level {sigmalevel};
+
+{#if sigmalevel > 500}
+<span> Youre sigma </span>
+{:else}
+<span>youre not sigma nor goated</span>
+{/if}
+
+<button on:click={getSigma}>Get sigma</button>
+
+
+<style>
+   .title{
+    color:blue;
+   }
+</style>
