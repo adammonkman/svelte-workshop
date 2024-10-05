@@ -2,17 +2,17 @@
 
 body {
     /* declare css variables for common constant values */
-    --bg0: #fbf1c7;
-    --bg1: #f4e8be;
+    --bg0: #e3a8c6;
+    --bg1: #d182ab;
 
-    --fg0 : #ddccab;
-    --focus: #654735;
+    --fg0 : #a982d1;
+    --focus: #590ca6;
 
     --green: #BFD39D;
     --red: #9d0006;
 
 
-    font-family: "Inter", sans-serif;
+    font-family: "Apple Chancery", cursive;
     background-color: var(--bg0);
 }
 
